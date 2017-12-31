@@ -440,6 +440,27 @@ def class_extra_for(algo):
                 return True
         """
 
+    elif algo == "word2vec":
+        return """
+        def _requires_training_frame(self):
+            \"\"\"
+            Determines if Word2Vec algorithm requires a training frame.
+            :return: False.
+            \"\"\"
+            return False
+
+        @staticmethod
+        def from_external(external=H2OFrame):
+            \"\"\"
+            Creates new H2OWord2vecEstimator based on an external model.
+            :param external: H2OFrame with an external model
+            :return: H2OWord2vecEstimator instance representing the external model
+            \"\"\"
+            w2v_model = H2OWord2vecEstimator(pre_trained=external)
+            w2v_model.train()
+            return w2v_model
+        """
+
 def module_extra_for(algo):
     if algo == "deeplearning":
         return """

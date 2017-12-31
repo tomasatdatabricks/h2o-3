@@ -203,3 +203,21 @@ class H2OWord2vecEstimator(H2OEstimator):
         self._parms["max_runtime_secs"] = max_runtime_secs
 
 
+
+    def _requires_training_frame(self):
+        """
+        Determines if Word2Vec algorithm requires a training frame.
+        :return: False.
+        """
+        return False
+
+    @staticmethod
+    def from_external(external=H2OFrame):
+        """
+        Creates new H2OWord2vecEstimator based on an external model.
+        :param external: H2OFrame with an external model
+        :return: H2OWord2vecEstimator instance representing the external model
+        """
+        w2v_model = H2OWord2vecEstimator(pre_trained=external)
+        w2v_model.train()
+        return w2v_model
