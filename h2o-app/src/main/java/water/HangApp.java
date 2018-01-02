@@ -2,9 +2,7 @@ package water;
 
 import water.util.Log;
 
-/**
- * Expects cluster of size 2
- */
+
 public class HangApp extends H2OStarter {
     public static void main(String[] args) {
 
@@ -12,6 +10,9 @@ public class HangApp extends H2OStarter {
             System.exit(1);
 
         start(args, System.getProperty("user.dir"));
+
+        // wait for cluster of size 2
+        H2O.waitForCloudSize(2, 1000);
 
         System.out.println("Before");
         // Renumber to handle dup names
