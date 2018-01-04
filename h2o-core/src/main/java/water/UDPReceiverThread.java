@@ -122,8 +122,8 @@ public class UDPReceiverThread extends Thread {
         _unknown_packets_per_sec = 0;
         _unknown_packet_time = ab._h2o._last_heard_from;
       }
-      //ab.close();
-      //return;
+      ab.close();
+      return;
     }
 
     // Paxos stateless packets & ACKs just fire immediately in a worker
