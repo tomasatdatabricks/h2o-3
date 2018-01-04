@@ -1,6 +1,8 @@
 package water;
 
 import java.util.Arrays;
+import java.util.Random;
+
 import water.H2ONode.H2Okey;
 import water.init.JarHash;
 import water.nbhm.NonBlockingHashMap;
@@ -41,7 +43,7 @@ public abstract class Paxos {
   private static class H2OClientTask extends MRTask<H2OClientTask> {
     private H2ONode clientNode;
     H2OClientTask(H2ONode clientNode) {
-      super(MAX_PRIORITY);
+      super((byte)(new Random().nextInt() % 126));
       this.clientNode = clientNode;
     }
 
@@ -98,7 +100,7 @@ public abstract class Paxos {
       // Note: this could cause a temporary flood of messages since the other
       // nodes will later inform about the connected client as well.
       // Note: It would be helpful to have a control over flatfile-based multicast to inject a small wait.
-      new H2OClientTask(h2o).doAllNodes().getResult();
+      new H2OClientTask(h2o).doAllNodes();
       //UDPClientEvent.ClientEvent.Type.CONNECT.broadcast(h2o);
     } else if (H2O.ARGS.client
                && H2O.isFlatfileEnabled()
