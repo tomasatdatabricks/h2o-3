@@ -33,6 +33,24 @@ public abstract class Paxos {
 
   public static final NonBlockingHashMap<H2Okey,H2ONode> PROPOSED = new NonBlockingHashMap<>();
 
+  /**
+   * Helper MR task used to detect clientDisconnectedConsensus on the timeout we last heard from the watchdog client
+   */
+  private static class H2OClientTask extends MRTask<H2OClientTask> {
+    private H2ONode clientNode;
+    private long watchdogClientRetryTimeout;
+    H2OClientTask(H2ONode clientNode) {
+      this.clientNode = clientNode;
+    }
+
+    @Override
+    protected void setupLocal() {
+      H2O.addNodeToFlatfile(clientNode);
+      H2O.reportClient(clientNode);
+    }
+  }
+
+
   // ---
   // This is a packet announcing what Cloud this Node thinks is the current
   // Cloud, plus other status bits
@@ -77,7 +95,8 @@ public abstract class Paxos {
       // Note: this could cause a temporary flood of messages since the other
       // nodes will later inform about the connected client as well.
       // Note: It would be helpful to have a control over flatfile-based multicast to inject a small wait.
-      UDPClientEvent.ClientEvent.Type.CONNECT.broadcast(h2o);
+      new H2OClientTask(h2o).getResult();
+      //UDPClientEvent.ClientEvent.Type.CONNECT.broadcast(h2o);
     } else if (H2O.ARGS.client
                && H2O.isFlatfileEnabled()
                && !H2O.isNodeInFlatfile(h2o)) {
