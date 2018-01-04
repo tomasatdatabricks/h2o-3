@@ -6,6 +6,8 @@ import water.init.JarHash;
 import water.nbhm.NonBlockingHashMap;
 import water.util.Log;
 
+import static water.H2O.MAX_PRIORITY;
+
 /**
  * (Not The) Paxos
  *
@@ -39,6 +41,7 @@ public abstract class Paxos {
   private static class H2OClientTask extends MRTask<H2OClientTask> {
     private H2ONode clientNode;
     H2OClientTask(H2ONode clientNode) {
+      super(MAX_PRIORITY);
       this.clientNode = clientNode;
     }
 
