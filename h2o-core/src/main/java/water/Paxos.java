@@ -43,7 +43,7 @@ public abstract class Paxos {
   private static class H2OClientTask extends MRTask<H2OClientTask> {
     private H2ONode clientNode;
     H2OClientTask(H2ONode clientNode) {
-      super((byte)(Math.abs(new Random().nextInt() % 126)));
+      super((byte)(H2O.SELF.index() % 126));
       this.clientNode = clientNode;
     }
 
