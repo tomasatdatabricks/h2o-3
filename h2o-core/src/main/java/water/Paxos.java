@@ -38,13 +38,13 @@ public abstract class Paxos {
    */
   private static class H2OClientTask extends MRTask<H2OClientTask> {
     private H2ONode clientNode;
-    private long watchdogClientRetryTimeout;
     H2OClientTask(H2ONode clientNode) {
       this.clientNode = clientNode;
     }
 
     @Override
     protected void setupLocal() {
+      Log.info("Adding node to flatfile");
       H2O.addNodeToFlatfile(clientNode);
       H2O.reportClient(clientNode);
     }
